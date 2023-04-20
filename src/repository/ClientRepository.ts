@@ -1,9 +1,10 @@
 import { Service } from 'typedi';
 import { Client } from '../models/client';
 import { IClient } from '../interfaces/IClient';
+import { ICrud } from '../interfaces/ICrud';
 
 @Service()
-class ClientRepository {
+class ClientRepository implements ICrud<IClient> {
 
     async listAll(): Promise<IClient[]> {
         return await Client.find();
