@@ -1,6 +1,8 @@
 import { DataSource } from "typeorm";
 import { Client } from "./models/client";
 import { DB_HOST, DB_USERNAME, DB_PASSWORD, DB_PORT, DB_NAME } from "./config";
+import { Address } from "./models/address";
+import { Perfil } from "./models/perfil";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -11,6 +13,6 @@ export const AppDataSource = new DataSource({
     port: Number(DB_PORT),
     // logging: true,
     synchronize: true,
-    entities: [Client],
+    entities: [Client, Address, Perfil],
     ssl: true,
 });

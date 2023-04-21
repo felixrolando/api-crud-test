@@ -7,6 +7,6 @@ const indexRouterV1 = express.Router()
 
 indexRouterV1.use(clientRouter);
 indexRouterV1.use(addressRouter);
-perfilRouter.use(perfilRouter);
+indexRouterV1.use(perfilRouter);
 
 export default indexRouterV1;

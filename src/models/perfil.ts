@@ -1,5 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, RelationId } from "typeorm";
-import { Client } from "./client";
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
 
 @Entity()
 export class Perfil extends BaseEntity {
@@ -10,6 +9,5 @@ export class Perfil extends BaseEntity {
     description: string;
 
     @Column()
-    @RelationId((client: Client) => client.id)
     client_id: number;
 }
