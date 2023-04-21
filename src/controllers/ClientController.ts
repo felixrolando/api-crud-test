@@ -17,13 +17,9 @@ export class ClientController {
     }
 
     async createClient(req: Request, res: Response): Promise<Response> {
-        const { phone, name, email }: IClient = req.body;
+        const { ...data }: IClient = req.body;
 
-        const clientCreated = await this.createClientService.execute({
-            email: email,
-            phone: phone,
-            name: name,
-        });
+        const clientCreated = await this.createClientService.execute(data);
 
         return res.json(clientCreated);
     }
@@ -34,15 +30,10 @@ export class ClientController {
     }
 
     async updateClient(req: Request, res: Response): Promise<Response> {
-        const { phone, name, email }: IClient = req.body;
-        const clientData: IClient = {
-            email: email,
-            name: name,
-            phone: phone
+        const { ...data }: IClient = req.body;
 
-        }
         const clientId = Number(req.params.id);
-        const client = await this.updateClientService.execute(clientData, clientId);
+        const client = await this.updateClientService.execute(data, clientId);
         return res.json(client);
     }
 
