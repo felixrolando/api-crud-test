@@ -14,7 +14,8 @@ export class CreateClientService {
 
         const clientData: IClient = {
             email: client.email,
-            name: client.name,
+            first_name: client.first_name,
+            last_name: client.last_name,
             phone: client.phone
 
         }

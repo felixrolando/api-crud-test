@@ -13,7 +13,8 @@ class ClientRepository implements ICrud<IClient> {
     async create(data: IClient): Promise<IClient> {
         const client = new Client();
         client.email = data.email;
-        client.name = data.name;
+        client.first_name = data.first_name;
+        client.last_name = data.last_name;
         client.phone = data.phone;
         return await client.save();
     }
