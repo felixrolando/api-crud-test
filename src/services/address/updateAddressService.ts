@@ -1,6 +1,7 @@
 import { Service } from 'typedi';
 import AddressRepository from '../../repository/AddressRepository';
 import { IAddress } from '../../interfaces/IAddress';
+import { BadRequestError } from '../../shared/BadRequestError';
 
 @Service()
 export class UpdateAddressService {
@@ -10,6 +11,14 @@ export class UpdateAddressService {
         this.addressRepository = addressRepository;
     }
     async execute(address: IAddress, addressId: number): Promise<IAddress> {
+
+        if (address.is_default === true) {
+            const validateDefault = await this.addressRepository.qtyClientAddressDefault(address.client_id);
+
+            if (validateDefault == 1) {
+                throw new BadRequestError('This client permit one only address by default');
+            }
+        }
 
         const addressData: IAddress = {
             client_id: address.client_id,

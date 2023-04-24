@@ -18,6 +18,14 @@ class AddressRepository implements ICrud<IAddress> {
         return null;
     }
 
+    async qtyClientAddressDefault(clientId: number): Promise<number> {
+        const records = await Address.findBy({
+            is_default: true,
+            client_id: clientId
+        })
+        return records.length;
+    }
+
     async listAll(): Promise<IAddress[]> {
         return await Address.find();
     }

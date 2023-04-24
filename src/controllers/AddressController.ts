@@ -48,11 +48,23 @@ export class AddressController {
     }
 
     async updateAddress(req: Request, res: Response): Promise<Response> {
-        const { ...data }: IAddress = req.body;
+        try {
 
-        const addressId = Number(req.params.id);
-        const address = await this.updateAddressService.execute(data, addressId);
-        return res.json(address);
+            const { ...data }: IAddress = req.body;
+
+            const addressId = Number(req.params.id);
+            const address = await this.updateAddressService.execute(data, addressId);
+            return res.json(address);
+
+        } catch (error) {
+            if (error instanceof BadRequestError) {
+                return res.status(400).json({ error: error.message });
+            } else {
+                console.error(error);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+        }
+
     }
 
     async deleteAddress(req: Request, res: Response): Promise<Response> {

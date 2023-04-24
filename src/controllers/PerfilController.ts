@@ -45,11 +45,23 @@ export class PerfilController {
     }
 
     async updatePerfil(req: Request, res: Response): Promise<Response> {
-        const { ...data }: IPerfil = req.body;
 
-        const perfilId = Number(req.params.id);
-        const perfil = await this.updatePerfilService.execute(data, perfilId);
-        return res.json(perfil);
+        try {
+            const { ...data }: IPerfil = req.body;
+
+            const perfilId = Number(req.params.id);
+            const perfil = await this.updatePerfilService.execute(data, perfilId);
+            return res.json(perfil);
+        } catch (error) {
+            if (error instanceof BadRequestError) {
+                return res.status(400).json({ error: error.message });
+            } else {
+                console.error(error);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+        }
+
+
     }
 
     async deletePerfil(req: Request, res: Response): Promise<Response> {

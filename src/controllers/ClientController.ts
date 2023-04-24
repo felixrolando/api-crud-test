@@ -47,11 +47,23 @@ export class ClientController {
     }
 
     async updateClient(req: Request, res: Response): Promise<Response> {
-        const { ...data }: IClient = req.body;
 
-        const clientId = Number(req.params.id);
-        const client = await this.updateClientService.execute(data, clientId);
-        return res.json(client);
+        try {
+            const { ...data }: IClient = req.body;
+
+            const clientId = Number(req.params.id);
+            const client = await this.updateClientService.execute(data, clientId);
+            return res.json(client);
+        } catch (error) {
+            if (error instanceof BadRequestError) {
+                return res.status(400).json({ error: error.message });
+            } else {
+                console.error(error);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+        }
+
+
     }
 
     async deleteClient(req: Request, res: Response): Promise<Response> {
