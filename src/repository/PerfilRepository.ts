@@ -6,6 +6,17 @@ import { Perfil } from '../models/perfil';
 @Service()
 class PerfilRepository implements ICrud<IPerfil> {
 
+    async findById(perfilId: number): Promise<Perfil | null> {
+        const perfil = await Perfil.findOneBy({
+            id: perfilId
+        });
+
+        if (perfil) {
+            return perfil;
+        }
+        return null;
+    }
+
     async listAll(): Promise<IPerfil[]> {
         return await Perfil.find();
     }
@@ -28,12 +39,10 @@ class PerfilRepository implements ICrud<IPerfil> {
     }
 
     async delete(perfilId: number): Promise<boolean> {
-        const address = await Perfil.findOneBy({
-            id: perfilId
-        });
+        const perfil = await this.findById(perfilId);
 
-        if (address) {
-            address.remove();
+        if (perfil) {
+            perfil.remove();
             return true;
         }
 

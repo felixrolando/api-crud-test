@@ -6,6 +6,18 @@ import { Address } from '../models/address';
 @Service()
 class AddressRepository implements ICrud<IAddress> {
 
+    async findById(addressId: number): Promise<Address | null> {
+        const address = await Address.findOneBy({
+            id: addressId
+        });
+
+        if (address) {
+            return address;
+        }
+
+        return null;
+    }
+
     async listAll(): Promise<IAddress[]> {
         return await Address.find();
     }
@@ -33,9 +45,7 @@ class AddressRepository implements ICrud<IAddress> {
     }
 
     async delete(addressId: number): Promise<boolean> {
-        const address = await Address.findOneBy({
-            id: addressId
-        });
+        const address = await this.findById(addressId);
 
         if (address) {
             address.remove();
