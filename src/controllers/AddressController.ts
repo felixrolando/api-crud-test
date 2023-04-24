@@ -22,8 +22,8 @@ export class AddressController {
 
         try {
 
-            if (!data.city || !data.client_id || !data.country || !data.is_default || !data.street) {
-                throw new BadRequestError('City,Client id, Country, is Defaul and street are required');
+            if (!data.city || !data.client_id || !data.country || !data.street) {
+                throw new BadRequestError('City,Client id, Country and street are required');
             }
 
             const clientCreated = await this.createAddressService.execute(data);
