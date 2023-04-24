@@ -6,6 +6,18 @@ import { ICrud } from '../interfaces/ICrud';
 @Service()
 class ClientRepository implements ICrud<IClient> {
 
+    async findById(clientId: number): Promise<Client | null> {
+        const client = await Client.findOneBy({
+            id: clientId
+        });
+
+        if (client) {
+            return client;
+        }
+
+        return null;
+    }
+
     async listAll(): Promise<IClient[]> {
         return await Client.find();
     }
@@ -28,9 +40,7 @@ class ClientRepository implements ICrud<IClient> {
     }
 
     async delete(clientId: number): Promise<boolean> {
-        const client = await Client.findOneBy({
-            id: clientId
-        });
+        const client = await this.findById(clientId)
 
         if (client) {
             client.remove();

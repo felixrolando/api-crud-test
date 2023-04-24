@@ -12,9 +12,7 @@ export class UpdatePerfilService {
     async execute(perfil: IPerfil, perfilId: number): Promise<IPerfil> {
 
         const perfilData: IPerfil = {
-            client_id: perfil.client_id,
             description: perfil.description
-
         }
         return await this.perfilRepository.update(perfilData, perfilId)
     }

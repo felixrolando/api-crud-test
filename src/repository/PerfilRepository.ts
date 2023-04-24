@@ -12,7 +12,9 @@ class PerfilRepository implements ICrud<IPerfil> {
 
     async create(data: IPerfil): Promise<IPerfil> {
         const perfil = new Perfil();
-        perfil.client_id = data.client_id;
+        if (data.client_id !== undefined) {
+            perfil.client_id = data.client_id;
+        }
         perfil.description = data.description;
         return await perfil.save();
     }

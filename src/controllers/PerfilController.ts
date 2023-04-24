@@ -5,6 +5,7 @@ import { ListAllPerfilService } from "../services/perfil/listAllPerfilService";
 import { UpdatePerfilService } from "../services/perfil/updatePerfilService";
 import { DeletePerfilService } from "../services/perfil/deletePerfilService";
 import { IPerfil } from "../interfaces/IPerfil";
+import { BadRequestError } from "../shared/BadRequestError";
 
 
 @Service()
@@ -19,9 +20,23 @@ export class PerfilController {
     async createPerfil(req: Request, res: Response): Promise<Response> {
         const { ...data }: IPerfil = req.body;
 
-        const clientCreated = await this.createPerfilService.execute(data);
+        try {
+            if (!data.client_id || !data.description) {
+                throw new BadRequestError('Client and Description are required');
+            }
+            const clientCreated = await this.createPerfilService.execute(data);
 
-        return res.json(clientCreated);
+            return res.json(clientCreated);
+        } catch (error) {
+            if (error instanceof BadRequestError) {
+                return res.status(400).json({ error: error.message });
+            } else {
+                console.error(error);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+        }
+
+
     }
 
     async listPerfil(req: Request, res: Response): Promise<Response> {

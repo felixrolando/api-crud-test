@@ -5,6 +5,7 @@ import { CreateAddressService } from "../services/address/createAddressService";
 import { ListAllAddressService } from "../services/address/listAllAddressService";
 import { UpdateAddressService } from "../services/address/updateAddressService";
 import { DeleteAddressService } from "../services/address/deleteAddressService";
+import { BadRequestError } from "../shared/BadRequestError";
 
 
 @Service()
@@ -19,9 +20,26 @@ export class AddressController {
     async createAddress(req: Request, res: Response): Promise<Response> {
         const { ...data }: IAddress = req.body;
 
-        const clientCreated = await this.createAddressService.execute(data);
+        try {
 
-        return res.json(clientCreated);
+            if (!data.city || !data.client_id || !data.country || !data.is_default || !data.street) {
+                throw new BadRequestError('City,Client id, Country, is Defaul and street are required');
+            }
+
+            const clientCreated = await this.createAddressService.execute(data);
+
+            return res.json(clientCreated);
+
+        } catch (error) {
+            if (error instanceof BadRequestError) {
+                return res.status(400).json({ error: error.message });
+            } else {
+                console.error(error);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+        }
+
+
     }
 
     async listAddress(req: Request, res: Response): Promise<Response> {
